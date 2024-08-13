@@ -6,10 +6,12 @@ import java.util.Map;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Document(collection = "students")
+@NoArgsConstructor
 public class Student {
 	long id;
 	@Setter

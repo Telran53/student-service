@@ -3,6 +3,7 @@ package telran.java53.student.service;
 import java.util.List;
 import java.util.Set;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -19,13 +20,14 @@ import telran.java53.student.model.Student;
 public class StudentServiceImpl implements StudentService {
 
 	final StudentRepository studentRepository;
+	final ModelMapper modelMapper;
 
 	@Override
 	public Boolean addStudent(StudentAddDto studentAddDto) {
 		if (studentRepository.findById(studentAddDto.getId()).isPresent()) {
 			return false;
 		}
-		Student student = new Student(studentAddDto.getId(), studentAddDto.getName(), studentAddDto.getPassword());
+		Student student = modelMapper.map(studentAddDto, Student.class);
 		studentRepository.save(student);
 		return true;
 	}
@@ -33,7 +35,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public StudentDto findStudent(Long id) {
 		Student student = studentRepository.findById(id).orElseThrow(StudentNotFoundException::new);
-		return new StudentDto(id, student.getName(), student.getScores());
+		return modelMapper.map(student, StudentDto.class);
 	}
 
 	@Override
